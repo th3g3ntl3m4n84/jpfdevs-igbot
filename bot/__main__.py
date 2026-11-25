@@ -103,8 +103,11 @@ def host_image(path: Path) -> str:
     # github: commit the image, push, and use the immutable raw URL of that commit
     repo = os.getenv("GITHUB_REPOSITORY") or sys.exit("GITHUB_REPOSITORY not set")
     git("add", rel)
-    git("commit", "-m", f"image: {path.stem}")
-    git("push")
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode != 0
+    if staged:  # new or changed image -> commit and push it
+        git("commit", "-m", f"image: {path.stem}")
+        git("push")
+    # else: identical image already committed by an earlier (failed) run; reuse it
     sha = git("rev-parse", "HEAD")
     return f"https://raw.githubusercontent.com/{repo}/{sha}/{rel}"
 
