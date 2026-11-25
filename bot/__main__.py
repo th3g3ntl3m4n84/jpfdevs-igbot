@@ -28,7 +28,7 @@ import requests
 import yaml
 
 from .instagram import Instagram, InstagramError
-from .render import render_post
+from .render import render_post, render_story
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state" / "posted.json"
@@ -92,24 +92,25 @@ def git(*args: str) -> str:
     return subprocess.run(["git", *args], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
 
 
-def host_image(path: Path) -> str:
+def host_images(paths: list[Path]) -> list[str]:
+    """Make images publicly reachable and return their URLs (one commit for all in github mode)."""
     mode = os.getenv("IMAGE_HOSTING") or ("github" if os.getenv("GITHUB_ACTIONS") else "base_url")
-    rel = path.relative_to(ROOT).as_posix()
     if mode == "base_url":
         base = os.getenv("IMAGE_BASE_URL")
         if not base:
             sys.exit("Set IMAGE_BASE_URL (public URL serving ./published/) or IMAGE_HOSTING=github")
-        return f"{base.rstrip('/')}/{path.name}"
-    # github: commit the image, push, and use the immutable raw URL of that commit
+        return [f"{base.rstrip('/')}/{p.name}" for p in paths]
+    # github: commit the images, push, and use the immutable raw URLs of that commit
     repo = os.getenv("GITHUB_REPOSITORY") or sys.exit("GITHUB_REPOSITORY not set")
-    git("add", rel)
+    rels = [p.relative_to(ROOT).as_posix() for p in paths]
+    git("add", *rels)
     staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode != 0
-    if staged:  # new or changed image -> commit and push it
-        git("commit", "-m", f"image: {path.stem}")
+    if staged:  # new or changed images -> commit and push
+        git("commit", "-m", f"images: {paths[0].stem}")
         git("push")
-    # else: identical image already committed by an earlier (failed) run; reuse it
+    # else: identical images already committed by an earlier run; reuse them
     sha = git("rev-parse", "HEAD")
-    return f"https://raw.githubusercontent.com/{repo}/{sha}/{rel}"
+    return [f"https://raw.githubusercontent.com/{repo}/{sha}/{r}" for r in rels]
 
 
 def wait_public(url: str, timeout: int = 120) -> None:
@@ -163,18 +164,24 @@ def cmd_post(a, cfg, posts):
             print(f"No eligible post for market '{a.market}'. Add content to content/posts.yaml.")
             return
     caption = build_caption(post, cfg)
-    img = render_post(post, cfg, PUBLISHED / f"{post['id']}-{dt.date.today():%Y%m%d}.jpg")
-    print(f"Selected {post['id']}  ->  {img.name}")
+    stem = f"{post['id']}-{dt.date.today():%Y%m%d}"
+    img = render_post(post, cfg, PUBLISHED / f"{stem}.jpg")
+    want_story = cfg["publishing"].get("also_story", True) and not a.no_story
+    story_img = render_story(img, post, cfg, PUBLISHED / f"{stem}-story.jpg") if want_story else None
+    print(f"Selected {post['id']}  ->  {img.name}" + (f" + {story_img.name}" if story_img else ""))
     if a.dry_run:
         print("--- DRY RUN: caption ---\n" + caption)
         return
 
     ig = client(cfg)
-    url = host_image(img)
-    print(f"Image URL: {url}")
-    wait_public(url)
+    urls = host_images([img] + ([story_img] if story_img else []))
+    for u in urls:
+        print(f"Image URL: {u}")
+        wait_public(u)
+
+    # feed post
     try:
-        cid = ig.create_image_container(url, caption, post.get("alt"))
+        cid = ig.create_image_container(urls[0], caption, post.get("alt"))
         ig.wait_until_ready(cid)
         media_id = ig.publish(cid)
     except InstagramError as e:
@@ -184,11 +191,22 @@ def cmd_post(a, cfg, posts):
         link = ig.permalink(media_id)
     except InstagramError:
         pass
-    state["history"].append({"id": post["id"], "market": post["market"], "media_id": media_id,
-                             "permalink": link,
-                             "published_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")})
-    save_state(state)
+    entry = {"id": post["id"], "market": post["market"], "media_id": media_id, "permalink": link,
+             "published_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
     print(f"✅ Published {post['id']}  media_id={media_id}  {link}")
+
+    # story (a failure here does not undo the feed post)
+    if story_img:
+        try:
+            sid = ig.create_story_container(urls[1])
+            ig.wait_until_ready(sid)
+            entry["story_id"] = ig.publish(sid)
+            print(f"✅ Story published  media_id={entry['story_id']}")
+        except InstagramError as e:
+            print(f"::warning::Feed post is live, but the story failed: {e}")
+
+    state["history"].append(entry)
+    save_state(state)
 
 
 def cmd_check(a, cfg, posts):
@@ -214,6 +232,7 @@ def main():
     p = sub.add_parser("next"); p.add_argument("--market", required=True, choices=["us", "br"])
     p = sub.add_parser("post"); p.add_argument("--market", choices=["us", "br"]); p.add_argument("--id")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--no-story", action="store_true", help="feed post only")
     sub.add_parser("check"); sub.add_parser("refresh-token")
     a = ap.parse_args()
     if a.cmd == "post" and not (a.market or a.id):
