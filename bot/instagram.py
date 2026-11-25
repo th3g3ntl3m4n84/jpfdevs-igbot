@@ -52,6 +52,10 @@ class Instagram:
             params["alt_text"] = alt_text
         return self._req("POST", f"{self.base}/{self.ig_user_id}/media", **params)["id"]
 
+    def create_story_container(self, image_url: str) -> str:
+        return self._req("POST", f"{self.base}/{self.ig_user_id}/media",
+                         media_type="STORIES", image_url=image_url)["id"]
+
     def create_carousel(self, image_urls: list[str], caption: str) -> str:
         children = [self._req("POST", f"{self.base}/{self.ig_user_id}/media",
                               image_url=u, is_carousel_item="true")["id"] for u in image_urls]
