@@ -198,7 +198,7 @@ def cmd_check(a, cfg, posts):
 
 
 def cmd_refresh(a, cfg, posts):
-    body = client(cfg).refresh_token()
+    body = client(cfg).refresh_token(os.getenv("FB_APP_ID"), os.getenv("FB_APP_SECRET"))
     days = int(body.get("expires_in", 0)) // 86400
     print(f"Refreshed. Valid for ~{days} days.", file=sys.stderr)
     print(body["access_token"])
