@@ -11,8 +11,13 @@ class InstagramError(RuntimeError):
 
 class Instagram:
     def __init__(self, token: str, ig_user_id: str, host: str, version: str):
-        self.token = token
-        self.ig_user_id = ig_user_id
+        self.token = token.strip().strip('"').strip("'")
+        self.ig_user_id = ig_user_id.strip()
+        # Tokens starting with "EAA" come from Facebook Login (Page/User tokens) and
+        # only work on graph.facebook.com; Instagram Login tokens ("IG...") use graph.instagram.com.
+        self.facebook = self.token.startswith("EAA")
+        if self.facebook:
+            host = "https://graph.facebook.com"
         self.base = f"{host.rstrip('/')}/{version}"
         self.host = host.rstrip("/")
 
@@ -32,7 +37,9 @@ class Instagram:
 
     # ── account ─────────────────────────────────────────────────
     def me(self) -> dict:
-        return self._req("GET", f"{self.base}/me", fields="user_id,username,account_type")
+        info = self._req("GET", f"{self.base}/{self.ig_user_id}", fields="id,username")
+        info["token_type"] = "Facebook Login (EAA…)" if self.facebook else "Instagram Login (IG…)"
+        return info
 
     def publishing_quota(self) -> dict:
         return self._req("GET", f"{self.base}/{self.ig_user_id}/content_publishing_limit",
@@ -71,8 +78,20 @@ class Instagram:
         return self._req("GET", f"{self.base}/{media_id}", fields="permalink").get("permalink", "")
 
     # ── token ───────────────────────────────────────────────────
-    def refresh_token(self) -> dict:
-        """Extend a long-lived token by 60 days (token must be >24h old and unexpired)."""
+    def refresh_token(self, app_id: str | None = None, app_secret: str | None = None) -> dict:
+        """Extend a long-lived token by 60 days."""
+        if self.facebook:
+            if not (app_id and app_secret):
+                raise InstagramError("Facebook (EAA) tokens need FB_APP_ID and FB_APP_SECRET to refresh")
+            r = requests.get(f"{self.base}/oauth/access_token",
+                             params={"grant_type": "fb_exchange_token", "client_id": app_id,
+                                     "client_secret": app_secret, "fb_exchange_token": self.token},
+                             timeout=60)
+            body = r.json()
+            if "access_token" not in body:
+                raise InstagramError(f"Token refresh failed: {body.get('error', body)}")
+            body.setdefault("expires_in", 60 * 86400)
+            return body
         r = requests.get(f"{self.host}/refresh_access_token",
                          params={"grant_type": "ig_refresh_token", "access_token": self.token},
                          timeout=60)
