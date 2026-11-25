@@ -13,8 +13,8 @@ brand:
 
 contact:
   # Edit these before going live. They are inserted into captions via {cta_*}.
-  email: "jpfdevs.cybersec@gmail.com"
-  website: "https://th3g3ntl3m4n84.github.io"
+  email: "contato@jpfdevs.com.br"           # TODO: replace with your real email
+  website: ""                               # optional, e.g. https://jpfdevs.com.br
   whatsapp_br: ""                           # optional, e.g. +55 67 9XXXX-XXXX
 
 markets:
@@ -41,6 +41,8 @@ publishing:
   api_version: "v25.0"
   host: "https://graph.instagram.com"
   # When every post of a market has been published once, start over from the top?
+  # Also publish every feed post as a Story (9:16 version of the same card).
+  also_story: true
   recycle_when_exhausted: true
   # Minimum days before the same post can be re-used when recycling.
   recycle_min_days: 60
