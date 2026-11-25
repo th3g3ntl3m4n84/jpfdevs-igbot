@@ -1,0 +1,46 @@
+# ─────────────────────────────────────────────────────────────
+#  jpfdevs.pentest — Instagram auto-poster configuration
+#  Secrets (token, account id) are NOT stored here: they come from
+#  environment variables / GitHub Actions secrets. See README.md.
+# ─────────────────────────────────────────────────────────────
+
+brand:
+  handle: "@jpfdevs.pentest"
+  name: "JPF Devs Pentest"
+  prompt_user: "jpfdevs"          # shown in the terminal bar: jpfdevs@pentest:~$
+  # Credentials shown on the "about" cards. Keep this list truthful.
+  credentials: ["OSCP+", "OSCP", "CompTIA PenTest+", "DCPT"]
+
+contact:
+  # Edit these before going live. They are inserted into captions via {cta_*}.
+  email: "jpfdevs.cybersec@gmail.com"
+  website: "https://th3g3ntl3m4n84.github.io"
+  whatsapp_br: ""                           # optional, e.g. +55 67 9XXXX-XXXX
+
+markets:
+  us:
+    language: en
+    cta: "DM us \"PENTEST\" or use the link in bio to book a free 30-min scoping call."
+    tag: "US • EN"
+  br:
+    language: pt
+    cta: "Envie \"PENTEST\" no direct ou acesse o link da bio para agendar uma conversa de escopo gratuita (30 min)."
+    tag: "BR • PT"
+
+design:
+  width: 1080
+  height: 1350                     # 4:5 portrait — the largest feed format
+  background: "#0B0F14"
+  panel: "#111821"
+  text: "#E6EDF3"
+  muted: "#8B98A5"
+  accent: "#39D353"                # terminal green
+  accent2: "#FF5F56"               # red dot / highlights
+
+publishing:
+  api_version: "v25.0"
+  host: "https://graph.instagram.com"
+  # When every post of a market has been published once, start over from the top?
+  recycle_when_exhausted: true
+  # Minimum days before the same post can be re-used when recycling.
+  recycle_min_days: 60

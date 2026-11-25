@@ -1,0 +1,407 @@
+# Content bank. Posts are published in order, per market, by the scheduler.
+# Add, edit or reorder freely. Fields:
+#   id        unique, never reuse            market   us | br
+#   command   the fake terminal line on top  headline big text on the card
+#   sub       smaller line under headline    bullets  up to 4 short items
+#   caption   Instagram caption ({cta}, {email}, {website}, {whatsapp} are filled in)
+#   hashtags  appended to the caption        alt      accessibility text
+#   style     "statement" (default) | "list" | "stat"
+
+# ═══════════════════════════════ USA (EN) ═══════════════════════════════
+- id: us-001-intro
+  market: us
+  style: list
+  command: "whoami"
+  headline: "Offensive security, done by a practitioner."
+  sub: "Penetration testing for US companies"
+  bullets: ["Web & API pentests", "External & internal network", "Active Directory attack paths", "Clear, actionable reports"]
+  caption: |
+    Attackers don't run checklists. Neither do we.
+
+    We're an offensive security team led by an OSCP+ certified penetration tester with years of hands-on red team work and published labs on OffSec Proving Grounds.
+
+    We test your web apps, APIs, networks and Active Directory the way a real attacker would, then hand you a report your developers can actually act on.
+
+    {cta}
+  hashtags: "#pentest #penetrationtesting #cybersecurity #offensivesecurity #infosec #redteam #OSCP #smallbusiness"
+  alt: "Dark terminal-style card reading: Offensive security, done by a practitioner. Services: web and API pentests, network, Active Directory, actionable reports."
+
+- id: us-002-scanner
+  market: us
+  style: statement
+  command: "nmap -sV --script vuln client.com"
+  headline: "A vulnerability scan is not a pentest."
+  sub: "Scanners find known issues. Humans find the chain that breaks you."
+  caption: |
+    Automated scanners are useful. But they can't:
+    → chain three "low" findings into full domain compromise
+    → abuse your business logic (pricing, roles, approvals)
+    → think like someone who actually wants in
+
+    A manual penetration test shows you what an attacker can really reach, and how to stop them.
+
+    {cta}
+  hashtags: "#pentest #vulnerabilityassessment #appsec #cybersecurity #infosec #ethicalhacking"
+  alt: "Card reading: A vulnerability scan is not a pentest."
+
+- id: us-003-compliance
+  market: us
+  style: list
+  command: "cat ./compliance_requirements.txt"
+  headline: "Need a pentest for compliance?"
+  sub: "Evidence-ready reports for your auditors"
+  bullets: ["SOC 2", "PCI DSS", "HIPAA", "ISO 27001"]
+  caption: |
+    SOC 2, PCI DSS, HIPAA and ISO 27001 audits often expect regular penetration testing.
+
+    We deliver:
+    ✔ Executive summary for leadership and auditors
+    ✔ Technical findings with risk ratings and reproduction steps
+    ✔ Remediation guidance your team can follow
+    ✔ Retest of fixed findings included
+
+    {cta}
+  hashtags: "#SOC2 #PCIDSS #HIPAA #ISO27001 #compliance #pentest #cybersecurity #startups"
+  alt: "Card reading: Need a pentest for compliance? SOC 2, PCI DSS, HIPAA, ISO 27001."
+
+- id: us-004-ad
+  market: us
+  style: statement
+  command: "bloodhound-python -c All -d corp.local"
+  headline: "One phished user. How far can they go?"
+  sub: "Internal & Active Directory penetration testing"
+  caption: |
+    In many internal assessments, the path from a single low-privileged account to Domain Admin is shorter than anyone expected.
+
+    Our internal / Active Directory pentest maps those attack paths (Kerberoasting, ADCS misconfigurations, delegation abuse, weak ACLs) and shows you exactly which links to break first.
+
+    {cta}
+  hashtags: "#activedirectory #redteam #pentest #bloodhound #ADCS #cybersecurity #infosec"
+  alt: "Card reading: One phished user. How far can they go? Internal and Active Directory penetration testing."
+
+- id: us-005-api
+  market: us
+  style: list
+  command: "curl -X GET /api/v1/users/1337"
+  headline: "Your API is your new perimeter."
+  sub: "What we test in an API pentest"
+  bullets: ["Broken object-level auth (BOLA/IDOR)", "Auth & token handling", "Mass assignment", "Rate limiting & business logic"]
+  caption: |
+    Your mobile app, SPA and partners all talk to the same API, and so do attackers.
+
+    Our API pentests follow the OWASP API Security Top 10 and go beyond it with manual testing of your real business flows.
+
+    {cta}
+  hashtags: "#APIsecurity #OWASP #appsec #pentest #SaaS #devsecops #cybersecurity"
+  alt: "Card reading: Your API is your new perimeter. BOLA/IDOR, auth and tokens, mass assignment, rate limiting."
+
+- id: us-006-process
+  market: us
+  style: list
+  command: "./engagement --steps"
+  headline: "How an engagement works"
+  sub: "Simple, transparent, no surprises"
+  bullets: ["1. Free scoping call", "2. Fixed-price proposal & rules of engagement", "3. Testing + live critical-finding alerts", "4. Report, debrief & free retest"]
+  caption: |
+    No vague hourly bills. No 300-page PDF dumps.
+
+    1️⃣ Free 30-min scoping call
+    2️⃣ Fixed-price proposal and signed rules of engagement
+    3️⃣ Testing, with immediate notice if we find something critical
+    4️⃣ Clear report, debrief meeting, and a retest of your fixes
+
+    {cta}
+  hashtags: "#pentest #cybersecurity #CISO #infosec #securityassessment #B2B"
+  alt: "Card listing the 4 steps of an engagement: scoping call, fixed-price proposal, testing, report and retest."
+
+- id: us-007-smb
+  market: us
+  style: statement
+  command: "echo $TARGET_SIZE"
+  headline: "\"We're too small to be a target.\""
+  sub: "Automated attacks don't check your headcount."
+  caption: |
+    Ransomware crews and bots scan the entire internet. Small and mid-sized businesses are hit precisely because they're assumed to be soft targets.
+
+    A focused, right-sized external pentest is one of the most cost-effective ways to find your exposed weaknesses before someone else does.
+
+    {cta}
+  hashtags: "#smallbusiness #SMB #ransomware #cybersecurity #pentest #infosec"
+  alt: "Card reading: We're too small to be a target. Automated attacks don't check your headcount."
+
+- id: us-008-creds
+  market: us
+  style: stat
+  command: "cat /etc/certifications"
+  headline: "OSCP+"
+  sub: "Hands-on, exam-proven offensive skills"
+  bullets: ["OSCP+ • OSCP", "CompTIA PenTest+", "DCPT", "Lab author, OffSec Proving Grounds"]
+  caption: |
+    Who's actually testing your systems matters.
+
+    Your engagement is led by a practitioner holding OSCP+, OSCP, CompTIA PenTest+ and DCPT, who also designs vulnerable labs published on OffSec Proving Grounds. We build the challenges other pentesters train on.
+
+    {cta}
+  hashtags: "#OSCP #OffSec #pentester #redteam #cybersecurity #infosec #ethicalhacking"
+  alt: "Card highlighting OSCP+ certification, plus OSCP, CompTIA PenTest+, DCPT and OffSec Proving Grounds lab author."
+
+- id: us-009-web
+  market: us
+  style: list
+  command: "ffuf -u https://app.client.com/FUZZ"
+  headline: "Web application pentest"
+  sub: "OWASP Top 10 and beyond"
+  bullets: ["Authentication & session flaws", "Injection (SQLi, SSTI, XXE)", "Access control & IDOR", "Business logic abuse"]
+  caption: |
+    Launching a new app or a major release? Test it before attackers do.
+
+    Our web application pentests combine OWASP methodology with creative, manual exploitation, and every finding comes with proof and a fix.
+
+    {cta}
+  hashtags: "#webappsecurity #OWASP #pentest #bugbounty #appsec #SaaS #cybersecurity"
+  alt: "Card reading: Web application pentest. Auth flaws, injection, access control, business logic."
+
+- id: us-010-report
+  market: us
+  style: statement
+  command: "pandoc findings.md -o report.pdf"
+  headline: "A report your developers will actually read."
+  sub: "Prioritized. Reproducible. Fixable."
+  caption: |
+    A pentest is only as good as what happens after it.
+
+    Every report includes an executive summary for leadership, risk-rated findings with step-by-step reproduction, and concrete remediation guidance. Plus a debrief call so nothing gets lost in translation.
+
+    {cta}
+  hashtags: "#pentest #securityreport #devsecops #cybersecurity #CTO #infosec"
+  alt: "Card reading: A report your developers will actually read."
+
+- id: us-011-external
+  market: us
+  style: statement
+  command: "subfinder -d client.com | httpx"
+  headline: "What does the internet see when it looks at you?"
+  sub: "External attack surface & network pentest"
+  caption: |
+    Forgotten subdomains. Exposed admin panels. VPNs missing patches. Leaked credentials.
+
+    Our external pentest starts with the same reconnaissance attackers use, then safely tests what we find so you can close the doors before anyone walks in.
+
+    {cta}
+  hashtags: "#attacksurface #externalpentest #recon #cybersecurity #pentest #infosec"
+  alt: "Card reading: What does the internet see when it looks at you? External attack surface and network pentest."
+
+- id: us-012-cta
+  market: us
+  style: statement
+  command: "./book_scoping_call.sh"
+  headline: "Find it before they do."
+  sub: "Free 30-minute scoping call"
+  caption: |
+    Not sure what you need tested, or how much it should cost?
+
+    Book a free, no-pressure 30-minute scoping call. We'll talk about your environment, your compliance needs and your budget, and tell you honestly what makes sense.
+
+    {cta}
+    📧 {email}
+  hashtags: "#pentest #cybersecurity #infosec #securityassessment #CISO #startups"
+  alt: "Card reading: Find it before they do. Free 30-minute scoping call."
+
+# ═══════════════════════════════ BRASIL (PT) ═══════════════════════════════
+- id: br-001-intro
+  market: br
+  style: list
+  command: "whoami"
+  headline: "Segurança ofensiva feita por quem pratica."
+  sub: "Testes de intrusão para empresas brasileiras"
+  bullets: ["Pentest web e de APIs", "Rede externa e interna", "Active Directory", "Relatórios claros e acionáveis"]
+  caption: |
+    Atacantes não seguem checklist. Nós também não.
+
+    Somos uma equipe de segurança ofensiva liderada por um pentester certificado OSCP+, com anos de experiência prática em red team e laboratórios publicados no OffSec Proving Grounds.
+
+    Testamos suas aplicações, APIs, redes e Active Directory como um atacante real faria, e entregamos um relatório que seu time consegue colocar em prática.
+
+    {cta}
+  hashtags: "#pentest #segurancadainformacao #cybersecurity #segurancaofensiva #redteam #OSCP #empresas"
+  alt: "Card escuro estilo terminal: Segurança ofensiva feita por quem pratica. Pentest web e APIs, redes, Active Directory, relatórios."
+
+- id: br-002-lgpd
+  market: br
+  style: statement
+  command: "grep -r 'dados_pessoais' /var/www"
+  headline: "A LGPD exige segurança. Você consegue provar a sua?"
+  sub: "Pentest como evidência de medidas técnicas de proteção"
+  caption: |
+    A LGPD exige que empresas adotem medidas de segurança técnicas e administrativas para proteger dados pessoais.
+
+    Um pentest periódico ajuda a identificar falhas antes de um incidente e gera documentação que demonstra a diligência da sua empresa.
+
+    ✔ Relatório executivo para a diretoria e o DPO
+    ✔ Achados técnicos priorizados por risco
+    ✔ Reteste das correções incluído
+
+    {cta}
+  hashtags: "#LGPD #protecaodedados #DPO #pentest #segurancadainformacao #compliance #ANPD"
+  alt: "Card: A LGPD exige segurança. Você consegue provar a sua?"
+
+- id: br-003-scanner
+  market: br
+  style: statement
+  command: "nmap -sV --script vuln cliente.com.br"
+  headline: "Scan de vulnerabilidades não é pentest."
+  sub: "Ferramentas acham o óbvio. Pessoas acham a cadeia que quebra sua empresa."
+  caption: |
+    Scanners automáticos são úteis, mas não conseguem:
+    → encadear três falhas "baixas" até comprometer o domínio inteiro
+    → abusar da lógica do seu negócio (preços, perfis, aprovações)
+    → pensar como alguém que realmente quer entrar
+
+    O teste de intrusão manual mostra até onde um atacante chega de verdade, e como impedi-lo.
+
+    {cta}
+  hashtags: "#pentest #analisedevulnerabilidade #appsec #cybersecurity #segurancadainformacao #hackeretico"
+  alt: "Card: Scan de vulnerabilidades não é pentest."
+
+- id: br-004-ransomware
+  market: br
+  style: statement
+  command: "echo $TAMANHO_DA_EMPRESA"
+  headline: "\"Minha empresa é pequena demais para ser alvo.\""
+  sub: "Ataques automatizados não perguntam o seu faturamento."
+  caption: |
+    Grupos de ransomware e bots varrem a internet inteira, o tempo todo. Pequenas e médias empresas são atacadas justamente porque costumam ser alvos mais fáceis.
+
+    Um pentest externo, no tamanho certo para o seu negócio, é uma das formas mais eficientes de encontrar suas brechas antes dos criminosos.
+
+    {cta}
+  hashtags: "#ransomware #pequenasempresas #PME #cybersecurity #pentest #segurancadainformacao"
+  alt: "Card: Minha empresa é pequena demais para ser alvo. Ataques automatizados não perguntam o seu faturamento."
+
+- id: br-005-ad
+  market: br
+  style: statement
+  command: "bloodhound-python -c All -d empresa.local"
+  headline: "Um usuário caiu no phishing. Até onde o atacante chega?"
+  sub: "Pentest interno e de Active Directory"
+  caption: |
+    Em muitos testes internos, o caminho de uma conta comum até Domain Admin é bem mais curto do que todos imaginavam.
+
+    Nosso pentest de Active Directory mapeia esses caminhos de ataque (Kerberoasting, ADCS mal configurado, delegação, ACLs fracas) e mostra exatamente quais elos quebrar primeiro.
+
+    {cta}
+  hashtags: "#activedirectory #redteam #pentest #bloodhound #ADCS #segurancadainformacao"
+  alt: "Card: Um usuário caiu no phishing. Até onde o atacante chega? Pentest interno e de Active Directory."
+
+- id: br-006-processo
+  market: br
+  style: list
+  command: "./projeto --etapas"
+  headline: "Como funciona um projeto"
+  sub: "Simples, transparente e sem surpresas"
+  bullets: ["1. Reunião de escopo gratuita", "2. Proposta com preço fechado", "3. Testes + alerta imediato de falhas críticas", "4. Relatório, apresentação e reteste"]
+  caption: |
+    Sem cobrança por hora sem fim. Sem PDF de 300 páginas.
+
+    1️⃣ Reunião de escopo gratuita (30 min)
+    2️⃣ Proposta com preço fechado e regras de engajamento assinadas
+    3️⃣ Testes, com aviso imediato se encontrarmos algo crítico
+    4️⃣ Relatório claro, reunião de apresentação e reteste das correções
+
+    {cta}
+  hashtags: "#pentest #cybersecurity #segurancadainformacao #CISO #TI #gestaodeTI"
+  alt: "Card com as 4 etapas: reunião de escopo, proposta, testes, relatório e reteste."
+
+- id: br-007-api
+  market: br
+  style: list
+  command: "curl -X GET /api/v1/clientes/1337"
+  headline: "Sua API é o seu novo perímetro."
+  sub: "O que testamos em um pentest de API"
+  bullets: ["Falhas de autorização (BOLA/IDOR)", "Autenticação e tokens", "Mass assignment", "Rate limiting e regras de negócio"]
+  caption: |
+    App, sistema web e parceiros falam com a mesma API, e os atacantes também.
+
+    Nossos pentests de API seguem o OWASP API Security Top 10 e vão além, com testes manuais dos fluxos reais do seu negócio.
+
+    {cta}
+  hashtags: "#APIsecurity #OWASP #appsec #pentest #desenvolvimento #devsecops #segurancadainformacao"
+  alt: "Card: Sua API é o seu novo perímetro. BOLA/IDOR, autenticação, mass assignment, rate limiting."
+
+- id: br-008-certs
+  market: br
+  style: stat
+  command: "cat /etc/certificacoes"
+  headline: "OSCP+"
+  sub: "Habilidade ofensiva comprovada na prática"
+  bullets: ["OSCP+ • OSCP", "CompTIA PenTest+", "DCPT", "Autor de labs no OffSec Proving Grounds"]
+  caption: |
+    Quem testa seus sistemas faz toda a diferença.
+
+    Seu projeto é conduzido por um profissional com OSCP+, OSCP, CompTIA PenTest+ e DCPT, que também cria laboratórios vulneráveis publicados no OffSec Proving Grounds. Criamos os desafios em que outros pentesters treinam.
+
+    {cta}
+  hashtags: "#OSCP #OffSec #pentester #redteam #cybersecurity #segurancadainformacao"
+  alt: "Card destacando a certificação OSCP+, além de OSCP, CompTIA PenTest+, DCPT e autoria de labs no OffSec Proving Grounds."
+
+- id: br-009-web
+  market: br
+  style: list
+  command: "ffuf -u https://app.cliente.com.br/FUZZ"
+  headline: "Pentest de aplicações web"
+  sub: "OWASP Top 10 e muito além"
+  bullets: ["Autenticação e sessão", "Injeção (SQLi, SSTI, XXE)", "Controle de acesso e IDOR", "Abuso de regras de negócio"]
+  caption: |
+    Vai lançar um sistema novo ou uma grande atualização? Teste antes que os atacantes testem.
+
+    Nossos pentests web combinam a metodologia OWASP com exploração manual e criativa, e cada achado vem com evidência e recomendação de correção.
+
+    {cta}
+  hashtags: "#segurancaweb #OWASP #pentest #appsec #ecommerce #startups #segurancadainformacao"
+  alt: "Card: Pentest de aplicações web. Autenticação, injeção, controle de acesso, regras de negócio."
+
+- id: br-010-relatorio
+  market: br
+  style: statement
+  command: "pandoc achados.md -o relatorio.pdf"
+  headline: "Um relatório que seu time vai realmente ler."
+  sub: "Priorizado. Reproduzível. Corrigível."
+  caption: |
+    Um pentest só vale pelo que acontece depois dele.
+
+    Todo relatório traz resumo executivo para a diretoria, achados classificados por risco com passo a passo de reprodução e orientações concretas de correção. Mais uma reunião de apresentação para ninguém ficar com dúvida.
+
+    {cta}
+  hashtags: "#pentest #relatorio #devsecops #segurancadainformacao #CTO #TI"
+  alt: "Card: Um relatório que seu time vai realmente ler."
+
+- id: br-011-externo
+  market: br
+  style: statement
+  command: "subfinder -d cliente.com.br | httpx"
+  headline: "O que a internet enxerga quando olha para sua empresa?"
+  sub: "Pentest externo e de superfície de ataque"
+  caption: |
+    Subdomínios esquecidos. Painéis administrativos expostos. VPN sem atualização. Credenciais vazadas.
+
+    Nosso pentest externo começa com o mesmo reconhecimento que os atacantes usam e depois testa com segurança o que encontramos, para você fechar as portas antes que alguém entre.
+
+    {cta}
+  hashtags: "#superficiedeataque #pentestexterno #recon #cybersecurity #pentest #segurancadainformacao"
+  alt: "Card: O que a internet enxerga quando olha para sua empresa?"
+
+- id: br-012-cta
+  market: br
+  style: statement
+  command: "./agendar_reuniao.sh"
+  headline: "Encontre a falha antes deles."
+  sub: "Reunião de escopo gratuita de 30 minutos"
+  caption: |
+    Não sabe exatamente o que precisa ser testado, ou quanto deveria custar?
+
+    Agende uma conversa gratuita de 30 minutos, sem compromisso. Falamos sobre seu ambiente, suas exigências (LGPD, clientes, auditorias) e seu orçamento, e dizemos com honestidade o que faz sentido.
+
+    {cta}
+    📧 {email}
+  hashtags: "#pentest #cybersecurity #segurancadainformacao #LGPD #empresas #TI"
+  alt: "Card: Encontre a falha antes deles. Reunião de escopo gratuita de 30 minutos."
