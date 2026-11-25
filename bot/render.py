@@ -153,3 +153,51 @@ def render_post(post: dict, cfg: dict, out_path: Path) -> Path:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     img.save(out_path, "JPEG", quality=92, optimize=True)
     return out_path
+
+
+STORY_TEXT = {
+    "us": ("NEW POST", "Tap our profile to read more"),
+    "br": ("NOVO POST", "Toque no perfil para saber mais"),
+}
+
+
+def render_story(card_path: Path, post: dict, cfg: dict, out_path: Path) -> Path:
+    """9:16 story (1080x1920) built around the already-rendered feed card."""
+    d = cfg["design"]
+    W, H = 1080, 1920
+    bg = _hex(d["background"])
+    accent, muted, text_c = _hex(d["accent"]), _hex(d["muted"]), _hex(d["text"])
+    img = Image.new("RGB", (W, H), bg)
+    draw = ImageDraw.Draw(img)
+    grid = tuple(min(255, v + 7) for v in bg)
+    for x in range(0, W, 54):
+        draw.line([(x, 0), (x, H)], fill=grid, width=1)
+    for y in range(0, H, 54):
+        draw.line([(0, y), (W, y)], fill=grid, width=1)
+
+    # card, slightly inset with an accent border; stays clear of the story UI zones
+    card = Image.open(card_path).convert("RGB")
+    cw = 960
+    card = card.resize((cw, int(card.height * cw / card.width)), Image.LANCZOS)
+    cx, cy = (W - cw) // 2, 330
+    draw.rounded_rectangle([cx - 6, cy - 6, cx + cw + 6, cy + card.height + 6], radius=26, fill=accent)
+    img.paste(card, (cx, cy))
+
+    top, bottom = STORY_TEXT.get(post["market"], STORY_TEXT["us"])
+    f_top = _font("DejaVuSansMono-Bold.ttf", 44)
+    label = f"> {top}_"
+    tw = draw.textlength(label, font=f_top)
+    draw.text(((W - tw) / 2, 230), label, font=f_top, fill=accent)
+
+    by = cy + card.height + 70
+    f_b = _font("Inter-SemiBold.otf", 46)
+    tw = draw.textlength(bottom, font=f_b)
+    draw.text(((W - tw) / 2, by), bottom, font=f_b, fill=text_c)
+    f_h = _font("DejaVuSansMono-Bold.ttf", 40)
+    h = cfg["brand"]["handle"]
+    tw = draw.textlength(h, font=f_h)
+    draw.text(((W - tw) / 2, by + 74), h, font=f_h, fill=muted)
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out_path, "JPEG", quality=92, optimize=True)
+    return out_path
